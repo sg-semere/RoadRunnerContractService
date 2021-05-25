@@ -1,0 +1,17 @@
+#defaults
+---------
+kafka:
+  bootstrap:
+      servers: "http://localhost:9092"
+  auto:
+    offset:
+      reset: "earliest"
+  commit:
+    interval:
+      ms: 30000
+  catch:
+    max:
+      bytes:
+        buffering: 194857600
+  compression:
+    type: "gzip"

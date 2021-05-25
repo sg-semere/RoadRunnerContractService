@@ -1,0 +1,32 @@
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'org.safeguard.contract.ContractValidatorMain'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+group 'org.safeguard.contract'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+//    implementation group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.8'
+    implementation group: 'org.apache.kafka', name: 'kafka-streams', version: '2.6.1'
+    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '2.6.1'
+
+
+    testImplementation group: 'org.apache.kafka', name: 'kafka-streams-test-utils', version: '2.6.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
