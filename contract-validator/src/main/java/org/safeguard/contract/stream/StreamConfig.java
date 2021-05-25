@@ -10,11 +10,14 @@ import static org.apache.kafka.streams.StreamsConfig.*;
 
 public class StreamConfig {
     private static final Logger log = LoggerFactory.getLogger(StreamConfig.class);
-
-    static Properties streamConfig(String appId, String bootstrapServer){
-        log.info("Building kafka stream config for {}", appId);
+    /*
+    * define create properties
+    * @return Properties
+    * */
+    static Properties streamConfig(String bootstrapServer) {
+        log.info("Building kafka stream config for contract-validator");
         Properties streamConfiguration = new Properties();
-        streamConfiguration.put(APPLICATION_ID_CONFIG, appId);
+        streamConfiguration.put(APPLICATION_ID_CONFIG, "contract-validator");
         streamConfiguration.put(DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         streamConfiguration.put(DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         streamConfiguration.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);

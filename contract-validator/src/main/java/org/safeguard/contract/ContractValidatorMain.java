@@ -1,6 +1,7 @@
 package org.safeguard.contract;
 
 import org.safeguard.contract.stream.StreamContractValidator;
+import org.safeguard.contract.util.StreamUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,18 +13,14 @@ public class ContractValidatorMain {
     public static void main(String[] args) {
         log.info("starting stream with bootstrap server {}");
 
-        var streamsApp = StreamContractValidator.buildStreamsApp("contract-validator", "http://localhost:9092");
+        var streamsApp = StreamContractValidator.buildStreamsApp("http://localhost:9092");
 
         Runtime.getRuntime().addShutdownHook(new Thread(streamsApp::close));
-//        Runtime.getRuntime().addShutdownHook(new Thread(streamsApp::stop));
-//        KafkaHelpers.onError(streamsApp).thenAcceptAsync(o -> {
-//            log.error("Application encountered an error. shutting down.");
-//            streamsApp.close(Duration.ofSeconds(5));
-//            streamsApp.stop(Duration.ofSeconds(5));
-//        });
+        StreamUtils.onError(streamsApp).thenAcceptAsync(o -> {
+            log.error("Application encountered an error. shutting down.");
+            streamsApp.close(Duration.ofSeconds(5));
+        });
 
         streamsApp.start();
-        streamsApp.close();
-
     }
 }

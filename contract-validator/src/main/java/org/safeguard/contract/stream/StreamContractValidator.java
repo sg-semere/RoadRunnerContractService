@@ -5,15 +5,17 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.Produced;
+import org.safeguard.contract.util.StreamUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StreamContractValidator {
     private static final Logger log = LoggerFactory.getLogger(StreamContractValidator.class);
 
-    public static KafkaStreams buildStreamsApp(String appId, String bootstrapServer){
+    public static KafkaStreams buildStreamsApp(String bootstrapServer){
         var topology = buildTopology();
-        var streamsConfig = StreamConfig.streamConfig(appId, bootstrapServer);
+        var streamsConfig = StreamConfig.streamConfig(bootstrapServer);
         return new KafkaStreams(topology, streamsConfig);
     }
     static Topology buildTopology(){
@@ -29,6 +31,10 @@ public class StreamContractValidator {
                         Serdes.String(),
                         Serdes.String()
                 ));
+        inputStream
+                .filter(StreamUtils::isNull)
+                .peek((k, v) -> System.out.printf("contract: %s, %s, %s%n", k, v))
+                .to("validatedTopic", Produced.with(Serdes.String(), Serdes.String()));
     }
 
 }
