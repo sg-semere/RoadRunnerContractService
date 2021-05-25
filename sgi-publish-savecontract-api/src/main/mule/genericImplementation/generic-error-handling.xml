@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+   <error-handler name="generic-global-error-handler-REST">
+            <on-error-continue enableNotifications="true" logException="true" type="APIKIT:BAD_REQUEST">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="f3f953b1-69de-401b-a36e-c26c26979532" doc:name="Setting httpStatus">
+                    <ee:message>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[400]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+			<flow-ref doc:name="Flow Reference to common-error-sub-flow-REST" doc:id="d8b843b5-836d-49b5-a200-f743051be7c2" name="common-error-sub-flow-REST"/>
+            
+</on-error-continue>
+		<on-error-continue type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="9f26a7a9-6d18-4f5f-9240-f0e9d4edf0a8" doc:name="Setting httpStatus">
+                    <ee:message>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[404]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+			<flow-ref doc:name="Flow Reference to common-error-sub-flow-REST" doc:id="d8b843b5-836d-49b5-a200-f743051be7c2" name="common-error-sub-flow-REST" />
+            </on-error-continue>
+		<on-error-continue type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="2c4e329a-a75a-40fe-a104-0a112940a0ec" doc:name="Setting httpStatus">
+                    <ee:message>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[405]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+			<flow-ref doc:name="Flow Reference to common-error-sub-flow-REST" doc:id="d8b843b5-836d-49b5-a200-f743051be7c2" name="common-error-sub-flow-REST" />
+            </on-error-continue>
+		<on-error-continue type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="e9acf80c-6e90-4c25-9e4c-6e4f9f1d16c4" doc:name="Setting httpStatus">
+                    <ee:message>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[406]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+			<flow-ref doc:name="Flow Reference to common-error-sub-flow-REST" doc:id="d8b843b5-836d-49b5-a200-f743051be7c2" name="common-error-sub-flow-REST" />
+            </on-error-continue>
+		<on-error-continue type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="ee3592e6-9fd3-4d44-8354-8b3afd46db4e" doc:name="Setting httpStatus">
+                    <ee:message>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[415]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+			<flow-ref doc:name="Flow Reference to common-error-sub-flow-REST" doc:id="d8b843b5-836d-49b5-a200-f743051be7c2" name="common-error-sub-flow-REST" />
+            </on-error-continue>
+		<on-error-continue type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="955cfd1e-ae03-492d-8fd5-a4436f3ccd1f" doc:name="Setting httpStatus">
+                    <ee:message>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[501]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+			<flow-ref doc:name="Flow Reference to common-error-sub-flow-REST" doc:id="d8b843b5-836d-49b5-a200-f743051be7c2" name="common-error-sub-flow-REST" />
+            </on-error-continue>
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="62205cd4-a2ec-46eb-959f-6cac82b85b9a" type="ANY">
+			<ee:transform doc:name="Setting Http Status" doc:id="bc67045d-3faa-47a4-ac32-1b79d5295094">
+						<ee:message>
+						</ee:message>
+						<ee:variables>
+							<ee:set-variable variableName="httpStatus"><![CDATA[500]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+			<flow-ref doc:name="Flow Reference to common-error-sub-flow-REST" doc:id="d8b843b5-836d-49b5-a200-f743051be7c2" name="common-error-sub-flow-REST" />
+		</on-error-continue>
+		
+        
+</error-handler>
+	<sub-flow name="common-error-sub-flow-REST" doc:id="8a00e98d-c32f-495e-89d7-fcebdf54bbfb" >
+		<flow-ref doc:name="Flow Reference to common-error-logger" doc:id="4638fc99-13ab-46af-8d52-6a342b9ac842" name="common-error-logger" />
+		<ee:transform doc:name="Error Payload" doc:id="15c7a2ef-dd9a-41b8-9251-7454d17b074b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "status":  "FAILED",
+    "statusCode": vars.httpStatus,
+    "responseDescription": if (vars.errorDescription != null) vars.errorDescription else error.description default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+
+
+</mule>

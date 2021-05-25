@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/cloudhub http://www.mulesoft.org/schema/mule/cloudhub/current/mule-cloudhub.xsd">
+	<sub-flow name="common-start-logger" doc:id="14e15afe-2c39-4e7a-92cd-eb1533a786c9" >
+		<logger level="INFO" doc:name="Start logger" doc:id="67f880c8-4f86-430a-8263-b18638187070" message="#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;&#10;&quot;APPLICATION-NAME&quot;: p('applicationName'),&#10;&quot;ENVIRONMENT&quot;: p('mule.env'),&#10;&quot;TIMESTAMP&quot; : now(),&#10;&quot;TRANSACTION-ID&quot; : vars.correlationId,&#10;&quot;REQUEST-PATH&quot; :(vars.requestPath) default &quot;&quot;,&#10;&quot;MULE-FLOW-NAME &quot;: (vars.flowName) default &quot;&quot;,&#10;&quot;MESSAGE&quot;: &quot;FLOW PROCESSING STARTED&quot; &#10;}]" category="com.ecom.sys.api"/>
+	</sub-flow>
+	<sub-flow name="common-end-logger" doc:id="d8a38738-9082-4052-893e-91c4732f60c6" >
+		<logger level="INFO" doc:name="End logger" doc:id="57a950cb-a47a-485c-a003-f49f4253f3ab" message="#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;&#10;&quot;APPLICATION-NAME&quot;: p('applicationName'),&#10;&quot;ENVIRONMENT&quot;: p('mule.env'),&#10;&quot;TIMESTAMP&quot; : now(),&#10;&quot;TRANSACTION-ID&quot; : vars.correlationId,&#10;&quot;REQUEST-PATH&quot; :(vars.requestPath) default &quot;&quot;,&#10;&quot;MULE-FLOW-NAME &quot;: (vars.flowName) default &quot;&quot;,&#10;&quot;MESSAGE&quot;: &quot;FLOW PROCESSING ENDED&quot; &#10;}]" category="com.ecom.sys.api"/>
+	</sub-flow>
+	<sub-flow name="common-error-logger" doc:id="1ddf77ce-50c1-4352-82e7-fa1fca956820">
+		<ee:transform doc:name="Error Body" doc:id="0cf66e36-7d21-4e99-8025-3476b6d40bd5" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="errorLogBody" ><![CDATA[output application/json
+---
+{
+"ERROR":
+	{
+	"APPLICATION-NAME": p('applicationName'),
+	"ENVIRONMENT": p('mule.env'),
+	"TIMESTAMP" : now(),
+	"TRANSACTION-ID" : vars.correlationId,
+	"REQUEST-PATH ": (vars.requestPath) default"",
+	"MULE-FLOW-NAME ": (vars.flowName) default "",
+	("REQUEST-PAYLOAD": vars.originalPayload) if ((vars.originalPayload) != null and !(isEmpty( vars.originalPayload))),
+	 ("QUERY-PARAMS": vars.queryParams) if (vars.queryParams != null and vars.queryParams != {}),
+	"ERROR-CODE" : (if(!isEmpty(vars.httpStatus)) vars.httpStatus else (flatten([message.error])..statusCode[0])) default 500,
+	"ERROR-TYPE": error.errorType.identifier default "",
+	"ERROR-MESSAGE": error.description default "",
+	
+	
+	}
+
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="ERROR" doc:name="Error Logger" doc:id="a42086f2-c741-42e3-b322-d4f8f93144c7" message="#[vars.errorLogBody]" category="com.ecom.sys.api"/>
+	</sub-flow>
+</mule>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:kafka="http://www.mulesoft.org/schema/mule/kafka"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/kafka http://www.mulesoft.org/schema/mule/kafka/current/mule-kafka.xsd">
+<kafka:producer-config name="Apache_Kafka_Producer_configuration" doc:name="Apache Kafka Producer configuration" doc:id="d7b6e845-5902-43ea-ac86-b555d0d448f9" >
+		<kafka:producer-plaintext-connection producerAck="ALL">
+			<kafka:bootstrap-servers >
+				<kafka:bootstrap-server value="${kafka.serverUrl}" />
+			</kafka:bootstrap-servers>
+		</kafka:producer-plaintext-connection>
+	</kafka:producer-config>
+	<http:listener-config name="publish-contract-service-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="publish-contract-service-config" api="resource::37ccc848-19e8-4850-9aee-1d505f6ecc6b:publish-contract-service:1.0.0:oas:zip:publish-contract-service.yaml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<global-property doc:name="Global Property" doc:id="4e136b2e-3389-411f-9e0d-fb015f32a3c0" name="mule.env" value="DEV" />
+	<configuration-properties doc:name="Configuration properties" doc:id="a60ed383-1cfc-449f-9f11-354b896a245a" file="properties\common.yaml" />
+	<configuration-properties doc:name="Configuration properties" doc:id="0174e63e-36b0-430f-af08-c31ae2247e18" file="properties\config-${mule.env}.yaml" />
+    
+    
+</mule>
