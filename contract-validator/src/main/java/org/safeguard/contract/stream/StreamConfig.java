@@ -1,12 +1,11 @@
 package org.safeguard.contract.stream;
 
+import static org.apache.kafka.streams.StreamsConfig.*;
 import org.apache.kafka.common.serialization.Serdes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
-
-import static org.apache.kafka.streams.StreamsConfig.*;
 
 public class StreamConfig {
     private static final Logger log = LoggerFactory.getLogger(StreamConfig.class);

@@ -13,12 +13,13 @@ import org.slf4j.LoggerFactory;
 public class StreamContractValidator {
     private static final Logger log = LoggerFactory.getLogger(StreamContractValidator.class);
 
-    public static KafkaStreams buildStreamsApp(String bootstrapServer){
+    public static KafkaStreams buildStreamsApp(String bootstrapServer) {
         var topology = buildTopology();
         var streamsConfig = StreamConfig.streamConfig(bootstrapServer);
         return new KafkaStreams(topology, streamsConfig);
     }
-    static Topology buildTopology(){
+
+    static Topology buildTopology() {
         var builder = new StreamsBuilder();
         addTopologyForType(builder, "saveContract");
 
