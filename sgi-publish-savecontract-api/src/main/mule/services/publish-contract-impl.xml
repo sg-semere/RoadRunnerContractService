@@ -9,28 +9,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	
 	<flow name="publish-contract-implFlow" doc:id="cdf4f57b-d211-4949-8bd5-9057e21ced05" >
 		<flow-ref doc:name="Flow Reference to common-start-logger" doc:id="f2b13716-05e8-4507-a44a-b676ee82d81f" name="common-start-logger"/>
-		<ee:transform doc:name="Setting Publish Components" doc:id="2060813d-2927-4095-a82c-7b10eb02a596" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-message.payload]]></ee:set-payload>
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="kafkaKey" ><![CDATA[%dw 2.0
-output application/java
-
-var keyValue =	if (message.payload.eContract.contractID != ""  or !(isBlank(message.payload.eContract.contractID))) 
-                message.payload.eContract.contractID
-		        else 
-		        vars.correlationId
-		
----
-keyValue
-]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<kafka:publish doc:name="Publish to Kafka Topic" doc:id="b5c3b835-ec3a-4d5e-bfd9-f9df130c0185" config-ref="Apache_Kafka_Producer_configuration" topic="${kafka.topic}" key="#[vars.kafkaKey as String]"/>
+		<kafka:publish doc:name="Publish to Kafka Topic" doc:id="b5c3b835-ec3a-4d5e-bfd9-f9df130c0185" config-ref="Apache_Kafka_Producer_configuration" topic="${kafka.topic}" key="#[message.payload.eContract.contractID]"/>
 		<ee:transform doc:name="Set Response" doc:id="124eb6ff-c52d-4b51-8ea0-4cdfa1ab5627" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
