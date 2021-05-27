@@ -20,6 +20,7 @@ public class StreamConfig {
         streamConfiguration.put(DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         streamConfiguration.put(DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         streamConfiguration.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
+//        streamConfiguration.put(STATE_DIR_CONFIG, "/Users/sghebrec/Documents/kafkaData");
 
         return streamConfiguration;
     }
