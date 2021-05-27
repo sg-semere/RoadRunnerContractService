@@ -21,20 +21,22 @@ public class StreamContractValidator {
 
     static Topology buildTopology() {
         var builder = new StreamsBuilder();
-        addTopologyForType(builder, "saveContract");
+        addTopologyForType(builder);
 
         return builder.build();
     }
 
-    private static void addTopologyForType(StreamsBuilder builder, String topic) {
-        var inputStream = builder.<String, String>stream(topic,
+    private static void addTopologyForType(StreamsBuilder builder) {
+        var inputStream = builder.<String, String>stream(
+                "saveContract",
                 Consumed.with(
                         Serdes.String(),
                         Serdes.String()
                 ));
         inputStream
+//                .mapValues(ContractRecordParser::getJsonMap)
                 .filter(StreamUtils::isNull)
-                .peek((k, v) -> System.out.printf("contract: %s, %s, %s%n", k, v))
+//                .peek((k, v) -> System.out.printf("contract: %s, %s, %s%n", k, v))
                 .to("validatedTopic", Produced.with(Serdes.String(), Serdes.String()));
     }
 
